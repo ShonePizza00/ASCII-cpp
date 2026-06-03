@@ -2,29 +2,28 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <istream>
 
-namespace plotter
-{
+namespace plotter {
 
-struct PlotterConfig
-{
-    int width;
-    int height;
-    char background_char;
-    std::vector<char> palette;
-    std::string plotter_type; // "basic" или "grayscale"
-};
+    struct PlotterConfig {
+        int width;
+        int height;
+        char background_char;
+        std::vector<char> palette;
+        std::string plotter_type; // "basic" или "grayscale"
+    };
 
-class Config
-{
-public:
-    static PlotterConfig LoadFromFile(const std::string& filename);
-    static PlotterConfig LoadFromString(std::istream& json_str);
-    static bool ValidateConfig(const PlotterConfig& config);
-    static PlotterConfig DefaultConfig();
+    class Config {
+    public:
+        static PlotterConfig LoadFromFile(const std::string& filename);
+        static PlotterConfig LoadFromString(std::istream& json_str);
+        static bool ValidateConfig(const PlotterConfig& config);
+        static PlotterConfig DefaultConfig();
+        static PlotterConfig GetDefaultConfig();
 
-private:
-    static std::vector<char> ParsePalette(const std::string& palette_str);
-};
+    private:
+        static std::vector<char> ParsePalette(const std::string& palette_str);
+    };
 
 } // namespace plotter
