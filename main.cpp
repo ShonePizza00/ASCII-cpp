@@ -2,5 +2,5 @@
 
 int main()
 {
-    plotter::DemoRunner::RunAllDemos();
+	plotter::DemoRunner::RunAllDemos();
 }
