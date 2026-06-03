@@ -2,132 +2,132 @@
 
 namespace json {
 
-    using namespace std;
+	using namespace std;
 
-    Node::Node(vector<Node> array)
-        : as_array_(move(array)) {
-    }
+	Node::Node(vector<Node> array)
+		: as_array_(move(array)) {
+	}
 
-    Node::Node(map<string, Node> map)
-        : as_map_(move(map)) {
-    }
+	Node::Node(map<string, Node> map)
+		: as_map_(move(map)) {
+	}
 
-    Node::Node(int value)
-        : as_int_(value) {
-    }
+	Node::Node(int value)
+		: as_int_(value) {
+	}
 
-    Node::Node(string value)
-        : as_string_(move(value)) {
-    }
+	Node::Node(string value)
+		: as_string_(move(value)) {
+	}
 
-    const vector<Node>& Node::AsArray() const {
-        return as_array_;
-    }
+	const vector<Node>& Node::AsArray() const {
+		return as_array_;
+	}
 
-    const map<string, Node>& Node::AsMap() const {
-        return as_map_;
-    }
+	const map<string, Node>& Node::AsMap() const {
+		return as_map_;
+	}
 
-    int Node::AsInt() const {
-        return as_int_;
-    }
+	int Node::AsInt() const {
+		return as_int_;
+	}
 
-    const string& Node::AsString() const {
-        return as_string_;
-    }
+	const string& Node::AsString() const {
+		return as_string_;
+	}
 
-    Document::Document(Node root)
-        : root_(move(root)) {
-    }
+	Document::Document(Node root)
+		: root_(move(root)) {
+	}
 
-    const Node& Document::GetRoot() const {
-        return root_;
-    }
+	const Node& Document::GetRoot() const {
+		return root_;
+	}
 
-    Node LoadNode(istream& input);
+	Node LoadNode(istream& input);
 
-    Node LoadArray(istream& input) {
-        vector<Node> result;
+	Node LoadArray(istream& input) {
+		vector<Node> result;
 
-        for (char c; input >> c && c != ']';) {
-            if (c != ',') {
-                input.putback(c);
-            }
-            result.push_back(LoadNode(input));
-        }
+		for (char c; input >> c && c != ']';) {
+			if (c != ',') {
+				input.putback(c);
+			}
+			result.push_back(LoadNode(input));
+		}
 
-        return Node(move(result));
-    }
+		return Node(move(result));
+	}
 
-    Node LoadInt(istream& input) {
-        int result = 0;
-        while (isdigit(input.peek())) {
-            result *= 10;
-            result += input.get() - '0';
-        }
-        return Node(result);
-    }
+	Node LoadInt(istream& input) {
+		int result = 0;
+		while (isdigit(input.peek())) {
+			result *= 10;
+			result += input.get() - '0';
+		}
+		return Node(result);
+	}
 
-    Node LoadString(istream& input) {
-        string line;
-        // getline(input, line, '"');
-        char c;
-        while (input.get(c)) {
-            if (c == '\\') {
-                char escaped;
-                if (!input.get(escaped)) {
-                    throw runtime_error("Invalid escape sequence in string");
-                }
-                line += escaped;
-            } else if (c == '"') {
-                return Node(move(line));
-            } else {
-                line += c;
-            }
-        }
-        // return Node(move(line));
-        throw runtime_error("Unterminated string");
-    }
+	Node LoadString(istream& input) {
+		string line;
+		// getline(input, line, '"');
+		char c;
+		while (input.get(c)) {
+			if (c == '\\') {
+				char escaped;
+				if (!input.get(escaped)) {
+					throw runtime_error("Invalid escape sequence in string");
+				}
+				line += escaped;
+			} else if (c == '"') {
+				return Node(move(line));
+			} else {
+				line += c;
+			}
+		}
+		// return Node(move(line));
+		throw runtime_error("Unterminated string");
+	}
 
-    Node LoadDict(istream& input) {
-        map<string, Node> result;
+	Node LoadDict(istream& input) {
+		map<string, Node> result;
 
-        for (char c; input >> c && c != '}';) {
-            if (c == ',') {
-                input >> c;
-            }
+		for (char c; input >> c && c != '}';) {
+			if (c == ',') {
+				input >> c;
+			}
 
-            string key = LoadString(input).AsString();
-            input >> c;
-            result.insert({move(key), LoadNode(input)});
-        }
+			string key = LoadString(input).AsString();
+			input >> c;
+			result.insert({move(key), LoadNode(input)});
+		}
 
-        return Node(move(result));
-    }
+		return Node(move(result));
+	}
 
-    Node LoadNode(istream& input) {
-        char c;
-        input >> c;
+	Node LoadNode(istream& input) {
+		char c;
+		input >> c;
 
-        if (c == '[') {
-            return LoadArray(input);
-        } else if (c == '{') {
-            return LoadDict(input);
-        } else if (c == '"') {
-            return LoadString(input);
-        } else {
-            input.putback(c);
-            return LoadInt(input);
-        }
-    }
+		if (c == '[') {
+			return LoadArray(input);
+		} else if (c == '{') {
+			return LoadDict(input);
+		} else if (c == '"') {
+			return LoadString(input);
+		} else {
+			input.putback(c);
+			return LoadInt(input);
+		}
+	}
 
-    Document Load(istream& input) {
-        return Document{LoadNode(input)};
-    }
+	Document Load(istream& input) {
+		return Document{LoadNode(input)};
+	}
 
-    /*
-    *
-    *  Используйте файл json.cpp из проекта Транспортного справочника
-    *
-    */
+	/*
+	*
+	*  Используйте файл json.cpp из проекта Транспортного справочника
+	*
+	*/
 }
