@@ -77,7 +77,7 @@ namespace plotter {
 		ret.width = 60;
 		ret.height = 30;
 		ret.background_char = '.';
-		ret.palette = { ' ', '.', ':', '-', '=', '+', '\\', '*', '#', '%', '@' };
+		ret.palette = { ' ', '.', ':', '-', '=', '+', '*', '#', '%', '@' };
 		ret.plotter_type = "basic";
 		return ret;
 	}
