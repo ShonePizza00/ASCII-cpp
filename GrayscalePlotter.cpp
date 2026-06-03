@@ -5,6 +5,23 @@
 
 namespace plotter {
 
+	GrayscalePlotter::GrayscalePlotter(std::unique_ptr<Canvas> canvas,
+		const std::vector<char>& palette = DefaultPalette()) 
+		: 	Plotter(std::move(canvas)),
+			palette_(palette.empty() ? DefaultPalette() : palette) {}
+
+	GrayscalePlotter::GrayscalePlotter(int width, int height, char background_char = ' ',
+		const std::vector<char>& palette = DefaultPalette()) 
+		:	Plotter(width, height, background_char),
+			palette_(palette.empty() ? DefaultPalette() : palette) {}
+
+	char GrayscalePlotter::BrightnessToChar(double brightness) const {
+		const double normalized = std::clamp(brightness, 0.0, 1.0);
+		const double max_index = static_cast<double>(palette_.size() - 1);
+		size_t index = static_cast<size_t>(normalized * max_index);
+		return palette_[index];
+	}
+
 	std::vector<char> GrayscalePlotter::DefaultPalette()
 	{
 		return { ' ', '.', ':', '-', '=', '+', '*', '#', '%', '@' };
