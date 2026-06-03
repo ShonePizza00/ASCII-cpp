@@ -12,7 +12,7 @@ namespace plotter {
 		if (!input) {
 			throw std::runtime_error("Cannot open config file: " + filename);
 		}
-		LoadFromString(input);
+		return LoadFromString(input);
 	}
 
 	PlotterConfig Config::LoadFromString(std::istream& json_str) {

@@ -6,12 +6,12 @@
 namespace plotter {
 
 	GrayscalePlotter::GrayscalePlotter(std::unique_ptr<Canvas> canvas,
-		const std::vector<char>& palette = DefaultPalette()) 
+		const std::vector<char>& palette) 
 		: 	Plotter(std::move(canvas)),
 			palette_(palette.empty() ? DefaultPalette() : palette) {}
 
-	GrayscalePlotter::GrayscalePlotter(int width, int height, char background_char = ' ',
-		const std::vector<char>& palette = DefaultPalette()) 
+	GrayscalePlotter::GrayscalePlotter(int width, int height, char background_char,
+		const std::vector<char>& palette) 
 		:	Plotter(width, height, background_char),
 			palette_(palette.empty() ? DefaultPalette() : palette) {}
 

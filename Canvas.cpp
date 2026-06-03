@@ -2,13 +2,14 @@
 #include "CanvasIterators.hpp"
 #include <algorithm>
 #include <fstream>
+#include <utility>
 
 namespace plotter
 {
 
 // Реализуйте методы класса Canvas в этом файле
 
-	Canvas::Canvas(int width, int height, char background_char = ' ')
+	Canvas::Canvas(int width, int height, char background_char)
 		: width_(width), height_(height), background_(background_char) {
 		if (width_ <= 0 || height_ <= 0) {
 			throw std::invalid_argument("Canvas dimensions must be positive");
@@ -105,7 +106,7 @@ namespace plotter
 		return x >= 0 && y >= 0 && x < width_ && y < height_;
 	}
 
-	void Canvas::Render(std::ostream& os = std::cout) const {
+	void Canvas::Render(std::ostream& os) const {
 		for (int y = 0; y < height_; ++y) {
 			const auto row_beg = data_.begin() + Index(0, y);
 			os.write(&(*row_beg), width_);
@@ -173,7 +174,7 @@ namespace plotter
 	/* 
 	 * RowIterator vvv
 	*/
-	Canvas::RowIterator::RowIterator(Canvas* canvas = nullptr, int row = 0, int col = 0) noexcept 
+	Canvas::RowIterator::RowIterator(Canvas* canvas, int row, int col) noexcept 
 		: canvas_(canvas), row_(row), col_(col) {}
 
 	Canvas::RowIterator::reference Canvas::RowIterator::operator*() const {
