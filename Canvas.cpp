@@ -190,7 +190,9 @@ namespace plotter
 	}
 
 	Canvas::RowIterator& Canvas::RowIterator::operator++() {
-		++col_;
+		if (col_ < canvas_->width_) {
+			++col_;
+		}
 		return *this;
 	}
 
@@ -201,7 +203,9 @@ namespace plotter
 	}
 
 	Canvas::RowIterator& Canvas::RowIterator::operator--() {
-		--col_;
+		if (col_ > 0) {
+			--col_;
+		}
 		return *this;
 	}
 
@@ -212,14 +216,19 @@ namespace plotter
 	}
 
 	Canvas::RowIterator& Canvas::RowIterator::operator+=(difference_type n) {
-		col_ += n;
+		difference_type width = canvas_->width_;
+		difference_type next = std::clamp(
+			static_cast<difference_type>(col_) + n,
+			static_cast<difference_type>(0),
+			width);
+		col_ = next;
 		return *this;
 	}
 
 	Canvas::RowIterator& Canvas::RowIterator::operator-=(difference_type n) {
-		col_ -= n;
-		return *this;
+		return *this += -n;
 	}
+	
 	/* 
 	 * RowIterator ^^^
 	*/
@@ -243,7 +252,9 @@ namespace plotter
 	}
 
 	Canvas::ColumnIterator& Canvas::ColumnIterator::operator++() {
-		++row_;
+		if (row_ < canvas_->height_) {
+			++row_;
+		}
 		return *this;
 	}
 
@@ -254,7 +265,9 @@ namespace plotter
 	}
 
 	Canvas::ColumnIterator& Canvas::ColumnIterator::operator--() {
-		--row_;
+		if (row_ > 0) {
+			--row_;
+		}
 		return *this;
 	}
 
@@ -265,13 +278,17 @@ namespace plotter
 	}
 
 	Canvas::ColumnIterator& Canvas::ColumnIterator::operator+=(difference_type n) {
-		row_ += n;
+		difference_type height = canvas_->height_;
+		difference_type next = std::clamp(
+			static_cast<difference_type>(row_) + n,
+			static_cast<difference_type>(0),
+			height);
+		row_ = next;
 		return *this;
 	}
 
 	Canvas::ColumnIterator& Canvas::ColumnIterator::operator-=(difference_type n) {
-		row_ -= n;
-		return *this;
+		return *this += -n;
 	}
 
 	/*
@@ -296,8 +313,14 @@ namespace plotter
 	Canvas::PixelIterator::reference Canvas::PixelIterator::operator[](difference_type n) const {
 		return *(*this + n);
 	}
+
 	Canvas::PixelIterator& Canvas::PixelIterator::operator++() {
-		++pos_;
+		size_t size = 
+			static_cast<size_t>(canvas_->height_) * 
+			static_cast<size_t>(canvas_->width_);
+		if (pos_ < size) {
+			++pos_;
+		}
 		return *this;
 	}
 
@@ -308,7 +331,9 @@ namespace plotter
 	}
 
 	Canvas::PixelIterator& Canvas::PixelIterator::operator--() {
-		--pos_;
+		if (pos_ > 0) {
+			--pos_;
+		}
 		return *this;
 	}
 
@@ -319,13 +344,21 @@ namespace plotter
 	}
 
 	Canvas::PixelIterator& Canvas::PixelIterator::operator+=(difference_type n) {
-		pos_ = static_cast<std::size_t>(static_cast<difference_type>(pos_) + n);
+		difference_type size = 
+			static_cast<difference_type>(canvas_->height_) * 
+			static_cast<difference_type>(canvas_->width_);
+		difference_type next = std::clamp(
+			static_cast<difference_type>(pos_) + n,
+			static_cast<difference_type>(0),
+			size);
+		pos_ = next;
 		return *this;
 	}
 
 	Canvas::PixelIterator& Canvas::PixelIterator::operator-=(difference_type n) {
 		return *this += -n;
 	}
+	
 	/*
 	 * PixelIterator ^^^
 	*/
