@@ -136,7 +136,7 @@ namespace plotter {
 
 		return histogram;
 	}
-
+	// код поставлялся в шаблоне задания. требуется ли его рефакторить согласно комментариям?
 	std::pair<char, char> Plotter::MinMaxColors(const std::map<char, int>& color_weights)
 	{
 		if (color_weights.empty())
@@ -239,7 +239,7 @@ namespace plotter {
 
 	void Plotter::DrawCircleBresenham(const int center_x, const int center_y, const int radius, const char brush)
 	{
-
+	// код поставлялся в шаблоне задания. требуется ли его рефакторить согласно комментариям?
 		auto draw_circle_points = [&](const int cx, const int cy, const int x, const int y)
 		{
 			if (canvas_->InBounds(cx + x, cy + y))
@@ -315,7 +315,7 @@ namespace plotter {
 			}
 		}
 	}
-
+	// код поставлялся в шаблоне задания. требуется ли его рефакторить согласно комментариям?
 	void Plotter::ScanlineFill(const int x, const int y, const char fill_brush)
 	{
 		if (!canvas_->InBounds(x, y))
